@@ -1,1 +1,0 @@
-# medpharma-test
