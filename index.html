@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>MedPharma — Your Health Our Priority</title>
+<style>
+:root{--g:#0868b5;--g2:#0b8aaf;--bg:#f3f8fc;--card:#fff;--text:#15324b;--muted:#6c8192;--danger:#d83b3b;--warn:#d98900;--blue:#2767d8;--line:#dce8f2}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
+button,input,select{font:inherit}button{cursor:pointer}.app{max-width:480px;margin:auto;min-height:100vh;background:var(--bg)}
+.screen{display:none;height:100vh;min-height:100vh;overflow:hidden}.screen.active{display:block}
+#splash{background:linear-gradient(145deg,#073c70,#087eb6);color:#fff;display:flex;align-items:center;justify-content:center;text-align:center}
+#splash.active{display:flex;height:100vh;overflow:hidden}.brandlogo{width:110px;height:110px;border-radius:30px;background:#fff;color:var(--g);display:flex;align-items:center;justify-content:center;font-size:55px;margin:auto auto 18px;box-shadow:0 12px 35px #0004}
+.brand{font-size:36px;font-weight:800}.brand span{color:#62dc96}.tag{margin-top:8px;font-size:14px;opacity:.9}.load{margin-top:42px;font-size:12px;opacity:.8;animation:pulse 1s infinite}@keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+.auth{padding:30px 22px;display:flex;flex-direction:column;justify-content:center;height:100vh;overflow:hidden}.auth .brandmini{font-size:22px;font-weight:800;color:var(--g);margin-bottom:30px}.auth h1{font-size:28px;margin:0 0 8px}.sub{color:var(--muted);font-size:14px;margin:0 0 20px}
+label{font-size:13px;font-weight:700;margin:11px 0 6px}input,select{width:100%;padding:13px;border:1px solid var(--line);border-radius:11px;background:#fff;outline:none}input:focus,select:focus{border-color:var(--g);box-shadow:0 0 0 3px #08734e16}
+.primary{background:var(--g);color:white;border:0;border-radius:11px;padding:14px;font-weight:700;width:100%;margin-top:18px}.danger{background:#fff0f0;color:var(--danger);border:1px solid #ffd0d0;border-radius:10px;padding:11px;width:100%}.err{display:none;background:#fff0f0;color:#c33;padding:10px;border-radius:10px;margin-top:12px;font-size:13px}.demo{font-size:11px;color:#8b9893;text-align:center;margin-top:16px}
+.header{height:64px;background:var(--g);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 17px;position:sticky;top:0;z-index:5}.header h2{margin:0;font-size:20px}.header button{background:none;border:0;color:#fff;font-size:22px}
+.content{padding:16px 14px 90px;height:calc(100vh - 64px);overflow-y:auto;-webkit-overflow-scrolling:touch}.welcome{background:linear-gradient(120deg,#0868b5,#08a88a);color:#fff;border-radius:17px;padding:18px;margin-bottom:14px}.welcome b{font-size:21px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{background:var(--card);border-radius:14px;padding:14px;box-shadow:0 2px 12px #17352b0c}.card small{color:var(--muted)}.value{font-size:21px;font-weight:800;margin-top:6px}.section-title{display:flex;justify-content:space-between;align-items:center;margin:19px 0 10px;font-weight:800}.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.quick button{border:0;background:#fff;border-radius:13px;padding:12px 5px;box-shadow:0 2px 10px #0000000c;font-size:12px;color:var(--text)}.quick span{display:block;font-size:22px;margin-bottom:5px}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,100%);background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);z-index:10}.bottom button{border:0;background:white;padding:10px 3px;color:var(--muted);font-size:11px}.bottom button.active{color:var(--g);font-weight:800}.bottom span{display:block;font-size:19px}
+.view{display:none}.view.active{display:block}.formcard{background:#fff;border-radius:15px;padding:15px;margin-bottom:12px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.actions{display:flex;gap:8px;margin-top:12px}.actions button{flex:1;padding:11px;border-radius:10px;border:1px solid var(--line);background:#fff}.actions .ok{background:var(--g);color:white;border-color:var(--g)}
+.table{width:100%;border-collapse:collapse;font-size:12px;background:#fff;border-radius:12px;overflow:hidden}.table th,.table td{padding:9px 7px;border-bottom:1px solid var(--line);text-align:left}.table th{background:#eaf4fc}.pill{display:inline-block;padding:4px 7px;border-radius:20px;background:#e9f6ef;color:var(--g);font-size:10px}.pill.red{background:#ffeded;color:#c33}.pill.orange{background:#fff5df;color:#a96b00}
+.list{display:flex;flex-direction:column;gap:8px}.item{background:#fff;border-radius:13px;padding:13px;display:flex;justify-content:space-between;gap:10px}.item b{font-size:14px}.muted{color:var(--muted);font-size:12px}.moneypos{color:var(--g);font-weight:800}.moneyneg{color:var(--danger);font-weight:800}.empty{text-align:center;color:var(--muted);padding:28px;background:#fff;border-radius:13px}
+.modal{position:fixed;inset:0;background:#0007;z-index:30;display:none;align-items:flex-end;justify-content:center}.modal.open{display:flex}.sheet{width:min(480px,100%);background:#fff;border-radius:20px 20px 0 0;padding:18px;max-height:90vh;overflow:auto}.sheet h3{margin-top:0}.close{float:right;border:0;background:#eee;border-radius:50%;width:30px;height:30px}
+.profile-avatar{width:72px;height:72px;border-radius:50%;background:#e8f4fc;color:var(--g);display:flex;align-items:center;justify-content:center;font-size:35px;margin-bottom:12px}
+.toast{position:fixed;bottom:75px;left:50%;transform:translateX(-50%);background:#17352b;color:#fff;padding:11px 16px;border-radius:20px;font-size:12px;display:none;z-index:50}
+hr{border:0;border-top:1px solid var(--line);margin:15px 0}
+@media(min-width:481px){body{padding:15px 0}.app{box-shadow:0 0 35px #0002;border-radius:18px;overflow:hidden}}
+</style>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0868b5">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+</head>
+<body>
+<div class="app">
+
+<section id="splash" class="screen active">
+  <div>
+    <div class="brandlogo"><svg viewBox="0 0 100 100" width="74" height="74" role="img" aria-label="MedPharma logo"><rect x="7" y="7" width="86" height="86" rx="24" fill="#fff"/><path d="M42 19h16v23h23v16H58v23H42V58H19V42h23z" fill="#0876bd"/><path d="M34 68c13-2 29-14 38-31 1 19-10 35-27 39-7 2-12-1-11-8z" fill="#13a889"/><path d="M36 68l13 9" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg></div><div class="brand">Med<span>Pharma</span></div>
+    <div class="tag">Your Health Our Priority</div><div class="load">Loading...</div>
+  </div>
+</section>
+
+<section id="login" class="screen auth">
+  <div class="brandmini"><svg viewBox="0 0 100 100" width="74" height="74" role="img" aria-label="MedPharma logo"><rect x="7" y="7" width="86" height="86" rx="24" fill="#fff"/><path d="M42 19h16v23h23v16H58v23H42V58H19V42h23z" fill="#0876bd"/><path d="M34 68c13-2 29-14 38-31 1 19-10 35-27 39-7 2-12-1-11-8z" fill="#13a889"/><path d="M36 68l13 9" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg> <span style="vertical-align:middle">Med<span style="color:#13a889">Pharma</span></span></div>
+  <h1>Login to Your Account</h1><p class="sub">Please enter your username and password</p>
+  <label>Username</label><input id="loginUser" placeholder="Enter username">
+  <label>Password</label><div style="display:flex;gap:6px;align-items:center"><input id="loginPass" type="password" placeholder="Enter password" style="flex:1"><button type="button" onclick="togglePassword('loginPass',this)" style="padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff">Show</button></div>
+  <button class="primary" onclick="login()">Login →</button>
+  <div id="loginErr" class="err">❌ Invalid username or password</div>
+  <div class="demo">MedPharma Pharmacy Management System</div>
+</section>
+
+<section id="main" class="screen">
+  <header class="header"><button onclick="openView('dashboard')">☰</button><h2>MedPharma</h2><button onclick="openView('profile')">👤</button></header>
+  <main class="content">
+
+    <div id="dashboard" class="view active">
+      <div class="welcome">Welcome, <b id="welcomeName">Admin</b><br><span class="muted" style="color:#d8fff0">Pharmacy Management System</span></div>
+      <div class="grid">
+        <div class="card"><small>Today's Sales</small><div class="value" id="dashSales">৳ 0</div></div>
+        <div class="card"><small>Today's Purchase</small><div class="value" id="dashPurchase">৳ 0</div></div>
+        <div class="card"><small>Cash in Hand</small><div class="value" id="dashCash">৳ 0</div></div>
+        <div class="card"><small>Customer Baki</small><div class="value" id="dashCredit">৳ 0</div></div>
+      </div>
+      <div class="section-title">Quick Actions</div>
+      <div class="quick">
+        <button onclick="openView('sales')"><span>🛒</span>Sell</button>
+        <button onclick="openView('purchases')"><span>📦</span>Buy</button>
+        <button onclick="openView('stock')"><span>💊</span>Stock</button>
+        <button onclick="openView('customers')"><span>📒</span>Baki</button>
+        <button onclick="openView('suppliers')"><span>🏭</span>Supplier</button>
+        <button onclick="openView('expenses')"><span>💸</span>Expense</button>
+        <button onclick="openView('reports')"><span>📊</span>Reports</button>
+        <button onclick="openView('profile')"><span>⚙️</span>Profile</button>
+      </div>
+      <div class="section-title">Low Stock <span class="muted">Auto alert</span></div>
+      <div id="lowStock" class="list"></div>
+    </div>
+
+    <div id="sales" class="view">
+      <div class="section-title">Sales / Sell <button class="primary" style="width:auto;margin:0;padding:9px 12px" onclick="openSaleModal()">+ Sale</button></div>
+      <div id="salesList" class="list"></div>
+    </div>
+
+    <div id="purchases" class="view">
+      <div class="section-title">Purchase / Buy <button class="primary" style="width:auto;margin:0;padding:9px 12px" onclick="openPurchaseModal()">+ Buy</button></div>
+      <div id="purchaseList" class="list"></div>
+    </div>
+
+    <div id="stock" class="view">
+      <div class="section-title">Medicine Stock <button class="primary" style="width:auto;margin:0;padding:9px 12px" onclick="openProductModal()">+ Medicine</button></div>
+      <input id="stockSearch" oninput="renderStock()" placeholder="Search medicine...">
+      <div style="height:10px"></div><div id="stockList"></div>
+    </div>
+
+    <div id="customers" class="view">
+      <div class="section-title">Customer Credit / Baki <button class="primary" style="width:auto;margin:0;padding:9px 12px" onclick="openCustomerModal()">+ Customer</button></div>
+      <div id="customerList" class="list"></div>
+    </div>
+
+    <div id="suppliers" class="view">
+      <div class="section-title">Supplier Payable / Baki <button class="primary" style="width:auto;margin:0;padding:9px 12px" onclick="openSupplierModal()">+ Supplier</button></div>
+      <div id="supplierList" class="list"></div>
+    </div>
+
+    <div id="expenses" class="view">
+      <div class="section-title">Expenses <button class="primary" style="width:auto;margin:0;padding:9px 12px" onclick="openExpenseModal()">+ Expense</button></div>
+      <div id="expenseList" class="list"></div>
+    </div>
+
+    <div id="reports" class="view">
+      <div class="section-title">Reports</div>
+      <div class="grid">
+        <div class="card"><small>Total Sales</small><div class="value" id="repSales">৳0</div></div>
+        <div class="card"><small>Total Purchase</small><div class="value" id="repPurchase">৳0</div></div>
+        <div class="card"><small>Gross Profit*</small><div class="value" id="repGross">৳0</div></div>
+        <div class="card"><small>Expenses</small><div class="value" id="repExpense">৳0</div></div>
+      </div>
+      <p class="muted">*Gross profit is estimated from recorded sales and purchase costs in this local prototype.</p>
+      <hr>
+      <div class="card"><b>Payment Method Summary</b><div id="paymentSummary" style="margin-top:10px"></div></div>
+    </div>
+
+    <div id="profile" class="view">
+      <div class="section-title">My Profile</div>
+      <div class="formcard">
+        <div class="profile-avatar">👤</div>
+        <div class="muted">Role</div><b>Admin</b><hr>
+        <label>Full Name</label><input id="pName">
+        <label>Username</label><input id="pUser" disabled>
+        <label>Phone</label><input id="pPhone">
+        <label>Email</label><input id="pEmail">
+        <label>Pharmacy Name</label><input id="pPharmacy">
+        <label>Address</label><input id="pAddress">
+        <button class="primary" onclick="saveProfile()">Save Profile</button>
+      </div>
+      <div class="formcard">
+        <b>Change Password</b>
+        <label>Current Password</label><input id="oldPass" type="password">
+        <label>New Password</label><input id="newPass" type="password">
+        <label>Confirm New Password</label><input id="confirmPass" type="password">
+        <button class="primary" onclick="changePassword()">Update Password</button>
+      </div>
+      <div class="formcard"><b>Data Backup & Restore</b><p class="muted">Backup file ta safe jaygay rakhun. Browser data clear hole backup chara data fire nao aste pare.</p><div class="actions"><button class="ok" onclick="exportBackup()">Download Backup</button><button onclick="document.getElementById('restoreFile').click()">Restore Backup</button></div><input id="restoreFile" type="file" accept="application/json,.json" style="display:none" onchange="restoreBackup(event)"><button style="margin-top:10px;width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:#fff" onclick="exportCSV()">Export Sales CSV</button></div>
+      <button class="danger" onclick="logout()">Logout</button>
+    </div>
+  </main>
+  <nav class="bottom">
+    <button id="nav-dashboard" class="active" onclick="openView('dashboard')"><span>⌂</span>Home</button>
+    <button id="nav-sales" onclick="openView('sales')"><span>🛒</span>Sell</button>
+    <button id="nav-purchases" onclick="openView('purchases')"><span>📦</span>Buy</button>
+    <button id="nav-stock" onclick="openView('stock')"><span>💊</span>Stock</button>
+    <button id="nav-profile" onclick="openView('profile')"><span>•••</span>More</button>
+  </nav>
+</section>
+</div>
+
+<div id="modal" class="modal"><div class="sheet"><button class="close" onclick="closeModal()">×</button><div id="modalBody"></div></div></div>
+<div id="toast" class="toast"></div>
+
+<script>
+const KEY="medpharma_full_v1";
+const DEFAULT_DB={username:"Nahiyan4259",password:"74259",profile:{name:"Admin",phone:"",email:"",pharmacy:"MedPharma",address:""},products:[],sales:[],purchases:[],customers:[],suppliers:[],expenses:[]};
+let db;
+try { db=JSON.parse(localStorage.getItem(KEY)||"null"); } catch(e) { db=null; }
+// Normalize existing browser data instead of assuming every older saved version has the latest fields.
+db={...DEFAULT_DB,...(db&&typeof db==="object"?db:{})};
+db.profile={...DEFAULT_DB.profile,...(db.profile&&typeof db.profile==="object"?db.profile:{})};
+for(const k of ["products","sales","purchases","customers","suppliers","expenses"]) if(!Array.isArray(db[k])) db[k]=[];
+db.products=db.products.map(p=>({...p,name:String(p?.name||""),qty:Number(p?.qty||0),min:Number(p?.min||0),sell:Number(p?.sell||0),buy:Number(p?.buy||0),unit:p?.unit||"pcs"}));
+db.customers=db.customers.map(c=>({...c,name:String(c?.name||"Customer"),baki:Number(c?.baki||0)}));
+db.suppliers=db.suppliers.map(c=>({...c,name:String(c?.name||"Supplier"),baki:Number(c?.baki||0)}));
+save();
+function save(){localStorage.setItem(KEY,JSON.stringify(db))}
+function money(n){return "৳ "+Number(n||0).toLocaleString("en-BD",{maximumFractionDigits:2})}
+function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function toast(t){let x=document.getElementById("toast");x.textContent=t;x.style.display="block";setTimeout(()=>x.style.display="none",1800)}
+function togglePassword(id,btn){let el=document.getElementById(id);el.type=el.type==='password'?'text':'password';btn.textContent=el.type==='password'?'Show':'Hide'}
+function exportBackup(){try{const blob=new Blob([JSON.stringify({app:'MedPharma',version:2,exportedAt:new Date().toISOString(),db},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='MedPharma-Backup-'+today()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('Backup downloaded')}catch(e){alert('Backup failed: '+e.message)}}
+function restoreBackup(event){const file=event.target.files&&event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);const candidate=data.db||data;if(!candidate||!Array.isArray(candidate.products)||!Array.isArray(candidate.sales)||!Array.isArray(candidate.customers)||!Array.isArray(candidate.purchases))throw new Error('This is not a valid MedPharma backup');if(!confirm('Restore korle current app data replace hobe. Age current backup niyechen? Continue?'))return;db=candidate;save();loadProfile();renderAll();toast('Backup restored')}catch(e){alert('Restore failed: '+e.message)}finally{event.target.value=''}};reader.readAsText(file)}
+function exportCSV(){const rows=[['Date','Customer','Medicine','Qty','Total','Paid','Due','Payment'],...db.sales.map(x=>[x.date,x.customer,x.product,x.qty,x.total,x.paid,x.baki??(x.total-x.paid),x.payment])];const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='MedPharma-Sales-'+today()+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('Sales CSV exported')}
+function login(){
+  if(document.getElementById("loginUser").value===db.username && document.getElementById("loginPass").value===db.password){
+    document.getElementById("loginErr").style.display="none"; show("main"); try { loadProfile(); renderAll(); } catch(e) { console.error("MedPharma startup error:",e); alert("App load error: "+e.message+". Please refresh and try again."); }
+  }else document.getElementById("loginErr").style.display="block"
+}
+function logout(){show("login");document.getElementById("loginPass").value="";document.getElementById("loginUser").value=""}
+function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active")}
+function openView(id){
+ document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");
+ document.querySelectorAll(".bottom button").forEach(x=>x.classList.remove("active"));
+ let n=document.getElementById("nav-"+id);if(n)n.classList.add("active");
+ renderAll();
+}
+function closeModal(){document.getElementById("modal").classList.remove("open")}
+function modal(html){document.getElementById("modalBody").innerHTML=html;document.getElementById("modal").classList.add("open")}
+function renderAll(){renderDashboard();renderSales();renderPurchases();renderStock();renderCustomers();renderSuppliers();renderExpenses();renderReports()}
+function renderDashboard(){
+ let s=db.sales.filter(x=>x.date===today()).reduce((a,x)=>a+x.total,0), p=db.purchases.filter(x=>x.date===today()).reduce((a,x)=>a+x.total,0);
+ let cash=s-p-db.expenses.filter(x=>x.date===today()).reduce((a,x)=>a+x.amount,0);
+ let cr=db.customers.reduce((a,x)=>a+x.baki,0);
+ document.getElementById("dashSales").textContent=money(s);document.getElementById("dashPurchase").textContent=money(p);document.getElementById("dashCash").textContent=money(cash);document.getElementById("dashCredit").textContent=money(cr);
+ document.getElementById("welcomeName").textContent=db.profile.name||"Admin";
+ let low=db.products.filter(x=>x.qty<=x.min);
+ document.getElementById("lowStock").innerHTML=low.length?low.map(x=>`<div class="item"><div><b>${x.name}</b><div class="muted">Stock: ${x.qty} ${x.unit}</div></div><span class="pill red">LOW</span></div>`).join(""):'<div class="empty">No low-stock medicine 🎉</div>';
+}
+function renderSales(){let el=document.getElementById("salesList");el.innerHTML=db.sales.length?db.sales.slice().reverse().map(x=>`<div class="item"><div><b>${x.customer||"Walk-in Customer"}</b><div class="muted">${x.product} × ${x.qty} • ${x.payment} • ${x.date}</div></div><div><b>${money(x.total)}</b><div class="muted">Paid ${money(x.paid)} / Baki ${money(x.baki ?? (x.total-x.paid))}</div></div></div>`).join(""):'<div class="empty">No sales yet.</div>'}
+function renderPurchases(){let el=document.getElementById("purchaseList");el.innerHTML=db.purchases.length?db.purchases.slice().reverse().map(x=>`<div class="item"><div><b>${x.supplier||"Supplier"}</b><div class="muted">${x.product} × ${x.qty} • ${x.payment} • ${x.date}</div></div><div><b>${money(x.total)}</b><div class="muted">Paid ${money(x.paid)} / Baki ${money(x.baki ?? (x.total-x.paid))}</div></div></div>`).join(""):'<div class="empty">No purchases yet.</div>'}
+function renderStock(){
+ let q=(document.getElementById("stockSearch")?.value||"").toLowerCase(), a=db.products.filter(x=>x.name.toLowerCase().includes(q));
+ document.getElementById("stockList").innerHTML=a.length?`<table class="table"><tr><th>Medicine</th><th>Stock</th><th>Sell</th><th>Expiry</th></tr>${a.map(x=>`<tr><td><b>${x.name}</b><br><span class="muted">${x.company||""} ${x.batch?"• "+x.batch:""}</span></td><td><span class="pill ${x.qty<=x.min?'red':''}">${x.qty} ${x.unit}</span></td><td>${money(x.sell)}</td><td>${x.expiry||"-"}</td></tr>`).join("")}</table>`:'<div class="empty">No medicine added yet.</div>'
+}
+function renderCustomers(){let el=document.getElementById("customerList");el.innerHTML=db.customers.length?db.customers.map((x,i)=>`<div class="item"><div><b>${x.name}</b><div class="muted">${x.phone||""}</div></div><div style="text-align:right"><b class="moneyneg">${money(x.baki)}</b><br><button style="border:0;background:#e8f5f2;color:#087e70;border-radius:8px;padding:6px;margin-top:5px" onclick="receiveCustomer(${i})">Receive</button></div></div>`).join(""):'<div class="empty">No customer credit accounts.</div>'}
+function renderSuppliers(){let el=document.getElementById("supplierList");el.innerHTML=db.suppliers.length?db.suppliers.map((x,i)=>`<div class="item"><div><b>${x.name}</b><div class="muted">${x.phone||""}</div></div><div style="text-align:right"><b class="moneyneg">${money(x.baki)}</b><br><button style="border:0;background:#fff0f0;color:#b22;border-radius:8px;padding:6px;margin-top:5px" onclick="paySupplier(${i})">Pay</button></div></div>`).join(""):'<div class="empty">No supplier accounts.</div>'}
+function renderExpenses(){let el=document.getElementById("expenseList");el.innerHTML=db.expenses.length?db.expenses.slice().reverse().map(x=>`<div class="item"><div><b>${x.category}</b><div class="muted">${x.note||""} • ${x.date}</div></div><b class="moneyneg">${money(x.amount)}</b></div>`).join(""):'<div class="empty">No expenses recorded.</div>'}
+function renderReports(){
+ let ts=db.sales.reduce((a,x)=>a+x.total,0),tp=db.purchases.reduce((a,x)=>a+x.total,0),te=db.expenses.reduce((a,x)=>a+x.amount,0);
+ document.getElementById("repSales").textContent=money(ts);document.getElementById("repPurchase").textContent=money(tp);document.getElementById("repExpense").textContent=money(te);document.getElementById("repGross").textContent=money(ts-tp);
+ let pay={Cash:0,bKash:0,Nagad:0,Card:0,Bank:0,Baki:0};db.sales.forEach(x=>pay[x.payment]=(pay[x.payment]||0)+x.paid);
+ document.getElementById("paymentSummary").innerHTML=Object.entries(pay).map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:6px 0"><span>${k}</span><b>${money(v)}</b></div>`).join("");
+}
+function openProductModal(){modal(`<h3>Add Medicine</h3><label>Medicine Name</label><input id="mName"><label>Company</label><input id="mCompany"><div class="row"><div><label>Batch</label><input id="mBatch"></div><div><label>Expiry</label><input id="mExpiry" type="date"></div></div><div class="row"><div><label>Purchase Price</label><input id="mBuy" type="number"></div><div><label>Selling Price</label><input id="mSell" type="number"></div></div><div class="row"><div><label>Opening Stock</label><input id="mQty" type="number"></div><div><label>Unit</label><select id="mUnit"><option>pcs</option><option>strip</option><option>box</option><option>bottle</option><option>pack</option></select></div></div><label>Minimum Stock Alert</label><input id="mMin" type="number" value="10"><button class="primary" onclick="addProduct()">Save Medicine</button>`)}
+function addProduct(){let p={name:v("mName"),company:v("mCompany"),batch:v("mBatch"),expiry:v("mExpiry"),buy:+v("mBuy")||0,sell:+v("mSell")||0,qty:+v("mQty")||0,min:+v("mMin")||0,unit:v("mUnit")};if(!p.name)return alert("Medicine name required");db.products.push(p);save();closeModal();renderAll();toast("Medicine added")}
+function openSaleModal(){if(!db.products.length)return alert("First add medicine in Stock.");modal(`<h3>New Sale</h3><label>Medicine</label><select id="sProd">${db.products.map((p,i)=>`<option value="${i}">${p.name} — Stock ${p.qty}</option>`).join("")}</select><label>Customer</label><input id="sCustomer" placeholder="Walk-in Customer"><div class="row"><div><label>Quantity</label><input id="sQty" type="number" value="1"></div><div><label>Unit Price</label><input id="sPrice" type="number"></div></div><label>Payment</label><select id="sPay"><option>Cash</option><option>bKash</option><option>Nagad</option><option>Card</option><option>Bank</option><option>Baki</option></select><label>Paid Amount</label><input id="sPaid" type="number"><button class="primary" onclick="addSale()">Complete Sale</button>`);setTimeout(()=>setSalePrice(),50);document.getElementById("sProd").onchange=setSalePrice}
+function setSalePrice(){let p=db.products[+v("sProd")];document.getElementById("sPrice").value=p.sell;document.getElementById("sPaid").value=""}
+function addSale(){
+  let i=+v("sProd"),p=db.products[i],q=+v("sQty")||0,price=+v("sPrice")||0;
+  if(!p)return alert("Please select a medicine.");
+  if(price<0)return alert("Price cannot be negative.");
+  let total=q*price,pay=v("sPay"),paid=pay==="Baki"?0:(+v("sPaid")||total);
+  let due=Math.max(0,total-paid),c=(v("sCustomer")||"").trim();
+
+  if(q<=0||q>p.qty)return alert("Stock quantity invalid.");
+  if(paid>total)return alert("Paid cannot exceed total.");
+
+  // Any unpaid amount must be added to Customer Credit/Baki automatically.
+  if(due>0 && !c)return alert("Baki amount exists. Please enter Customer name so the credit can be recorded.");
+
+  p.qty-=q;
+  db.sales.push({
+    date:today(),product:p.name,qty:q,total,paid,payment:pay,
+    customer:c||"Walk-in Customer",baki:due
+  });
+
+  if(due>0){
+    let old=db.customers.find(x=>x.name.toLowerCase()===c.toLowerCase());
+    if(old){
+      old.baki=Number(old.baki||0)+due;
+    }else{
+      db.customers.push({name:c,phone:"",baki:due});
+    }
+  }
+
+  save();closeModal();renderAll();
+  toast(due>0 ? `Sale saved — ${money(due)} added to Customer Baki` : "Sale saved");
+}
+function openPurchaseModal(){if(!db.products.length)return alert("First add medicine in Stock.");modal(`<h3>New Purchase</h3><label>Medicine</label><select id="bProd">${db.products.map((p,i)=>`<option value="${i}">${p.name}</option>`).join("")}</select><label>Supplier</label><input id="bSupplier" placeholder="Supplier name"><div class="row"><div><label>Quantity</label><input id="bQty" type="number" value="1"></div><div><label>Buy Price</label><input id="bPrice" type="number"></div></div><label>Payment</label><select id="bPay"><option>Cash</option><option>bKash</option><option>Nagad</option><option>Bank</option><option>Credit</option></select><label>Paid Amount</label><input id="bPaid" type="number"><button class="primary" onclick="addPurchase()">Save Purchase</button>`);if(db.products.length)setTimeout(()=>document.getElementById("bPrice").value=db.products[0].buy,30);document.getElementById("bProd").onchange=()=>document.getElementById("bPrice").value=db.products[+v("bProd")].buy}
+function addPurchase(){if(!db.products.length)return;let i=+v("bProd"),p=db.products[i],q=+v("bQty")||0,price=+v("bPrice")||0,total=q*price,pay=v("bPay"),paid=pay==="Credit"?0:(+v("bPaid")||total),name=v("bSupplier")||"Supplier";if(q<=0)return alert("Quantity invalid");if(paid>total)return alert("Paid cannot exceed total");p.qty+=q;p.buy=price;db.purchases.push({date:today(),product:p.name,qty:q,total,paid,payment:pay,supplier:name});if(total-paid>0){let s=db.suppliers.find(x=>x.name.toLowerCase()===name.toLowerCase());if(s)s.baki+=total-paid;else db.suppliers.push({name,phone:"",baki:total-paid})}save();closeModal();renderAll();toast("Purchase saved")}
+function openCustomerModal(){modal(`<h3>Add Customer</h3><label>Name</label><input id="cName"><label>Phone</label><input id="cPhone"><button class="primary" onclick="addCustomer()">Save Customer</button>`)}
+function addCustomer(){let n=v("cName");if(!n)return;db.customers.push({name:n,phone:v("cPhone"),baki:0});save();closeModal();renderAll();toast("Customer added")}
+function receiveCustomer(i){let c=db.customers[i];modal(`<h3>Receive Baki — ${c.name}</h3><p>Current Baki: <b>${money(c.baki)}</b></p><label>Amount Received</label><input id="payAmt" type="number"><label>Payment Method</label><select id="payMethod"><option>Cash</option><option>bKash</option><option>Nagad</option><option>Card</option><option>Bank</option></select><button class="primary" onclick="receive(${i})">Save Payment</button>`)}
+function receive(i){let a=+v("payAmt")||0;if(a<=0||a>db.customers[i].baki)return alert("Invalid amount");db.customers[i].baki-=a;save();closeModal();renderAll();toast("Customer payment received")}
+function openSupplierModal(){modal(`<h3>Add Supplier</h3><label>Name</label><input id="spName"><label>Phone</label><input id="spPhone"><button class="primary" onclick="addSupplier()">Save Supplier</button>`)}
+function addSupplier(){let n=v("spName");if(!n)return;db.suppliers.push({name:n,phone:v("spPhone"),baki:0});save();closeModal();renderAll();toast("Supplier added")}
+function paySupplier(i){let s=db.suppliers[i];modal(`<h3>Pay Supplier — ${s.name}</h3><p>Payable: <b>${money(s.baki)}</b></p><label>Amount</label><input id="supAmt" type="number"><button class="primary" onclick="paySup(${i})">Save Payment</button>`)}
+function paySup(i){let a=+v("supAmt")||0;if(a<=0||a>db.suppliers[i].baki)return alert("Invalid amount");db.suppliers[i].baki-=a;save();closeModal();renderAll();toast("Supplier payment saved")}
+function openExpenseModal(){modal(`<h3>Add Expense</h3><label>Category</label><select id="eCat"><option>Rent</option><option>Electricity</option><option>Salary</option><option>Transport</option><option>Delivery</option><option>Other</option></select><label>Amount</label><input id="eAmt" type="number"><label>Note</label><input id="eNote"><button class="primary" onclick="addExpense()">Save Expense</button>`)}
+function addExpense(){let a=+v("eAmt")||0;if(a<=0)return;db.expenses.push({date:today(),category:v("eCat"),amount:a,note:v("eNote")});save();closeModal();renderAll();toast("Expense saved")}
+function loadProfile(){document.getElementById("pName").value=db.profile.name;document.getElementById("pUser").value=db.username;document.getElementById("pPhone").value=db.profile.phone;document.getElementById("pEmail").value=db.profile.email;document.getElementById("pPharmacy").value=db.profile.pharmacy;document.getElementById("pAddress").value=db.profile.address}
+function saveProfile(){db.profile={name:v("pName")||"Admin",phone:v("pPhone"),email:v("pEmail"),pharmacy:v("pPharmacy")||"MedPharma",address:v("pAddress")};save();renderAll();toast("Profile updated")}
+function changePassword(){if(v("oldPass")!==db.password)return alert("Current password is wrong.");if(!v("newPass")||v("newPass")!==v("confirmPass"))return alert("New passwords do not match.");db.password=v("newPass");save();["oldPass","newPass","confirmPass"].forEach(id=>document.getElementById(id).value="");toast("Password updated")}
+function v(id){return document.getElementById(id)?.value||""}
+setTimeout(()=>{show("login");document.getElementById("loginUser").focus()},1600);
+</script>
+
+<script>if ("serviceWorker" in navigator) { window.addEventListener("load", () => navigator.serviceWorker.register("service-worker.js").catch(()=>{})); }</script>
+</body>
+</html>
